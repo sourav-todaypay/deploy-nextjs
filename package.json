@@ -28,6 +28,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-headless-pagination": "^1.1.6",
+    "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.1",
     "react-input-mask": "^2.0.4",
     "react-select": "^5.10.1",
