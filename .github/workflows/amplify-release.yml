@@ -1,0 +1,56 @@
+name: Create Release and Deploy to Staging
+
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+    types: [semantic-release]
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - name: Create Release
+        id: release
+        uses: kranthisai-1/workflows/semantic-release@main 
+
+      - name: Release success alert
+        if: ${{ steps.release.outputs.version != '' && github.ref_name == github.event.repository.default_branch }}
+        uses: kranthisai-1/workflows/slack-alert@main
+        with:
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          title: "Release successful"
+          message: "New version `v${{ steps.release.outputs.version }}` has been released."
+          message_type: "success"
+
+      - name: Release failure alert
+        if: ${{ steps.release.outputs.version == '' && github.ref_name == github.event.repository.default_branch }}
+        uses: kranthisai-1/workflows/slack-alert@main
+        with:
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          title: "Failed to create a release"
+          message: "Pushed to `main` branch, but failed to create a release."
+          message_type: "error"
+
+  # deploy:
+  #   needs: release
+  #   if: ${{ needs.release.outputs.version != '' }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Trigger Amplify Staging webhook
+  #       run: |
+  #         curl -X POST \
+  #           -H "Content-Type: application/json" \
+  #           -d '{}' \
+  #           'https://webhooks.amplifyuif.us-east-1.amazonaws.com/prod/webhooks?id=491b16b6-4c4b-4690-ba80-3e4dcf40a4d4&token=HoP06RMo7z7VPwCznlDYrfSHdqBcPTCnMWgEybr9A'
