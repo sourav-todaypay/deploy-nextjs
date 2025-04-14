@@ -1,0 +1,35 @@
+{
+  "CoreMerchants": {
+    "title": "Hello bro how are you!"
+  },
+  "confirmation": {
+    "message": "Are you sure you want to",
+    "this": "this"
+  },
+  "sideNav": {
+    "merchants": "Merchants",
+    "refunds": "Refunds",
+    "customers": "Customers",
+    "giftCards": "Gift Cards",
+    "payoutModes": "Payout Modes",
+    "wallets": "Wallets",
+    "plans": "Plans",
+    "feeRateHeading": "Fee Rate",
+    "workflowsHeading": "Workflows",
+    "d2c": "D2C",
+    "llm": "LLM",
+    "core": "Core",
+    "inviteCodesHeading": "Invite Codes",
+    "waitListHeading": "WaitList",
+    "orders": "Orders",
+    "paymentPlans": "Payment Plans",
+    "logout": "Logout"
+  },
+    "pagination": {
+      "viewing": "Viewing",
+      "of": "of",
+      "results": "results",
+      "previous": "Previous",
+      "next": "Next"
+    }
+}
