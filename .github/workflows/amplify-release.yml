@@ -33,7 +33,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::270290807520:role/GitHubActionsAmplifyDeployRole1
+          role-to-assume: arn:aws:iam::270290807521:role/GitHubActionsAmplifyDeployRole1
           aws-region: us-east-1
 
       - name: Build Next.js app (standalone)
