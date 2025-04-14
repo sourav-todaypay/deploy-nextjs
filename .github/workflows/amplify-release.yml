@@ -26,9 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # - name: Create release version
-      #   id: release
-      #   uses: kranthisai-1/workflows/semantic-release@main
+      - name: Create release version
+        id: release
+        uses: kranthisai-1/workflows/semantic-release@main
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
@@ -53,7 +53,7 @@ jobs:
       - name: Trigger Amplify deployment (staging)
         run: |
           aws amplify start-deployment \
-            --app-id YOUR_AMPLIFY_APP_ID \
+            --app-id ddwpoj2b9jk65 \
             --branch-name staging \
             --source-url https://nextjs-admin-builds.s3.amazonaws.com/releases/v${{ steps.release.outputs.version }}.zip
 
