@@ -4,53 +4,65 @@ on:
   push:
     branches:
       - main
-  repository_dispatch:
-    types: [semantic-release]
 
 permissions:
-  contents: write
-  packages: write
-  issues: write
-  pull-requests: write
+  id-token: write
+  contents: read
 
 jobs:
-  release:
+  release_and_deploy:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.release.outputs.version }}
+    environment: staging
+
     steps:
-      - name: Create Release
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create release version
         id: release
-        uses: kranthisai-1/workflows/semantic-release@main 
+        uses: kranthisai-1/workflows/semantic-release@main
 
-      - name: Release success alert
-        if: ${{ steps.release.outputs.version != '' && github.ref_name == github.event.repository.default_branch }}
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::270290807520:role/GitHubActionsAmplifyDeployRole1
+          aws-region: us-east-1
+
+      - name: Build Next.js app (standalone)
+        run: |
+          npm run build
+          mkdir -p .output-zip
+          cp -r .next/standalone .output-zip/
+          cp -r public .output-zip/
+          cp -r .next/static .output-zip/
+          cp package.json .output-zip/
+          cd .output-zip && zip -r ../app.zip . && cd ..
+
+      - name: Upload build to S3
+        run: |
+          aws s3 cp app.zip s3://nextjs-admin-builds/releases/v${{ steps.release.outputs.version }}.zip
+
+      - name: Trigger Amplify deployment (staging)
+        run: |
+          aws amplify start-deployment \
+            --app-id YOUR_AMPLIFY_APP_ID \
+            --branch-name staging \
+            --source-url https://nextjs-admin-builds.s3.amazonaws.com/releases/v${{ steps.release.outputs.version }}.zip
+
+      - name: Send Slack success notification
+        if: ${{ success() && steps.release.outputs.version != '' }}
         uses: kranthisai-1/workflows/slack-alert@main
         with:
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          title: "Release successful"
-          message: "New version `v${{ steps.release.outputs.version }}` has been released."
+          title: "✅ Staging Deployment Complete"
+          message: "Version `v${{ steps.release.outputs.version }}` was deployed to *staging*."
           message_type: "success"
-
-      - name: Release failure alert
-        if: ${{ steps.release.outputs.version == '' && github.ref_name == github.event.repository.default_branch }}
-        uses: kranthisai-1/workflows/slack-alert@main
-        with:
-          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          title: "Failed to create a release"
-          message: "Pushed to `main` branch, but failed to create a release."
-          message_type: "error"
-
-  # deploy:
-  #   needs: release
-  #   if: ${{ needs.release.outputs.version != '' }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Trigger Amplify Staging webhook
-  #       run: |
-  #         curl -X POST \
-  #           -H "Content-Type: application/json" \
-  #           -d '{}' \
-  #           'https://webhooks.amplifyuif.us-east-1.amazonaws.com/prod/webhooks?id=491b16b6-4c4b-4690-ba80-3e4dcf40a4d4&token=HoP06RMo7z7VPwCznlDYrfSHdqBcPTCnMWgEybr9A'
