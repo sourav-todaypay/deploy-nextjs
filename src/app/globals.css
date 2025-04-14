@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Enable smooth color transitions */
+:root {
+  --text-color-light: #111827;
+  --text-color-dark: #f3f4f6;
+  --bg-light: #ffffff;
+  --bg-dark: #1f2937;
+  --border-color-light: #e5e7eb;
+  --border-color-dark: #374151;
+
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color-light: #f3f4f6;
+    --text-color-dark: #111827;
+    --bg-light: #1f2937;
+    --bg-dark: #ffffff;
+    --border-color-light: #374151;
+    --border-color-dark: #e5e7eb;
+  }
+}
+
+/* Apply transitions to body */
+body {
+  background-color: var(--bg-light);
+  color: var(--text-color-light);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.active {
+  @apply bg-active-50 text-black px-3 py-1 rounded-md;
+}
+
+.blocked {
+  @apply bg-blocked-50 text-black px-3 py-1 rounded-md;
+}
+
+.pending {
+  @apply bg-pending-50 text-black px-3 py-1 rounded-md;
+}
+
+.open {
+  @apply bg-open-50 text-black px-3 py-1 rounded-md;
+}
+
+.sent {
+  @apply bg-sent-50 text-black px-3 py-1 rounded-md;
+}
+
+.delayed {
+  @apply bg-delayed-50 text-black px-3 py-1 rounded-md;
+}
+
+.completed {
+  @apply bg-active-50 text-black px-3 py-1 rounded-md;
+}
+
+.due {
+  @apply bg-due-50 text-black px-3 py-1 rounded-md;
+}
+
+/* Hide date input UI */
+.date-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Ensure all internal date picker elements are hidden */
+.date-input::-webkit-datetime-edit,
+.date-input::-webkit-datetime-edit-fields-wrapper,
+.date-input::-webkit-datetime-edit-text,
+.date-input::-webkit-datetime-edit-month-field,
+.date-input::-webkit-datetime-edit-day-field,
+.date-input::-webkit-datetime-edit-year-field,
+.date-input::-webkit-calendar-picker-indicator,
+.date-input::-webkit-inner-spin-button {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* Firefox-specific fix */
+.date-input::-moz-calendar-picker-indicator {
+  display: none !important;
+}
+
+.react-select__option {
+  @apply flex items-center px-2 py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800;
+}
+
+.react-select__option--is-selected {
+  @apply bg-purple-100 dark:bg-purple-900;
+}
+
+.react-select__multi-value {
+  @apply bg-purple-100 dark:bg-purple-900 rounded-md;
+}
+
+.react-select__multi-value__label {
+  @apply text-purple-800 dark:text-purple-200;
+}
+
+.react-select__control {
+  @apply border rounded-md bg-white dark:bg-black text-black dark:text-white;
+}
+
+.react-select__menu {
+  @apply bg-white dark:bg-black border border-gray-300 dark:border-gray-700;
+}

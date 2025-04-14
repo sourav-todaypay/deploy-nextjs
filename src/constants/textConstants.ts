@@ -1,0 +1,17 @@
+export const QUERY_TEXT = 'Wallet Top-up';
+export const USD_TEXT = ' USD';
+export const PhoneText = 'Phone';
+export const EmailText = 'Email';
+export const IDText = 'ID';
+export const USER_GIVEN = 'USER_GIVEN';
+export const MOBILE_NUMBER = 'mobile_number';
+export const EMAIL = 'email';
+export const INVOICING = 'INVOICING';
+export const PREPAID = 'PREPAID';
+export const FINANCING = 'FINANCING';
+export const AMOUNT = 'Amount';
+export const SUCCESSFUL = 'Successful';
+export const STATUS = 'Status';
+export const PHONE_NUMBER = 'phone_number';
+export const CUSTOMER = 'CUSTOMER';
+export const MERCHANT = 'MERCHANT';
