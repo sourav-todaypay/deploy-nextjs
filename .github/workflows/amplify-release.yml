@@ -48,7 +48,7 @@ jobs:
 
       - name: Upload build to S3
         run: |
-          aws s3 cp app.zip s3://nextjs-admin-builds/releases/v${{ steps.release.outputs.version }}.zip
+           aws s3 cp app.zip s3://nextjs-admin-builds/releases/v${{ steps.release.outputs.version }}.zip --acl bucket-owner-full-control
 
       - name: Trigger Amplify deployment (staging)
         run: |
