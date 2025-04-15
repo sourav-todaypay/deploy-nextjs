@@ -19,7 +19,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'TodayPay',
   description: '',
-  // icons: "/favicon.ico/favicon-16x16.png", testing flow
+  // icons: "/favicon.ico/favicon-16x16.png"
   openGraph: {
     title: 'TodayPay',
     description: 'Refunds as a Service®',
