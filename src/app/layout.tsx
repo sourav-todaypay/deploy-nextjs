@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import AuthGuard from '@/components/AuthGuard';
 import { ThemeProvider } from 'next-themes';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
+// dummy comment for testing purpose
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
