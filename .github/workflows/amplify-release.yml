@@ -28,7 +28,7 @@ jobs:
 
       - name: Create release version
         id: release
-        uses: kranthisai-1/workflows/semantic-release@main
+        uses: sourav-todaypay/workflows/semantic-release@main
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
